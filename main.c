@@ -3,7 +3,7 @@
     BEGIN, //inicio ✅
     ID, //id ✅
     NUMBER,
-    STRING,
+    STRING, ✅
     COMMENTARY,
     TYPE_INT, //int ✅
     TYPE_FLOAT, //float ✅
@@ -39,6 +39,7 @@ enum tipo_token {
     BEGIN, //inicio 
     ID, //id 
     NUMBER,
+    NUMBER_FLOAT,
     STRING,
     COMMENTARY,
     TYPE_INT, //int
@@ -61,6 +62,11 @@ enum tipo_token {
     OP_MUL, // *
     OP_DIV, // /
     END // fim
+};
+
+enum atributos {
+    INT = 282,
+    FLOAT,
 };
 
 typedef struct Token {
@@ -98,18 +104,16 @@ unsigned char *readFile(char *fileName) {
   return code;
 }
 
-int falhar() {
+void falhar(int erro) {
 
-  cont_sim_lido++;
+  switch (erro) {
 
-  switch (estado) {
-
-    case BEGIN:
-      partida = END;
+    case 1:
+      printf("ERRO: caracter não pertercente a linguagem!\n");
       break;
 
-    case END:
-      partida = ELSE;
+    case 2:
+      printf("ERRO: número inválido!\n");
       break;
 
     case ELSE:
@@ -117,7 +121,7 @@ int falhar() {
       break;
 
   }
-  return partida;
+  exit(-1);
 }
 
 Token proximo_token() {
@@ -144,6 +148,12 @@ Token proximo_token() {
 
             else if (c == '"'){
               estado = STRING;
+            }
+
+            //números
+
+            else if (isdigit(c)){
+              estado = NUMBER;
             }
 
             //caracteres únicos
@@ -182,7 +192,53 @@ Token proximo_token() {
               estado = OP_DIV;
             }
             else 
-              estado = falhar();
+              falhar(1);
+            break;
+      
+      case NUMBER:
+            cont_sim_lido++;
+            c = code[cont_sim_lido];
+
+            while (cont_sim_lido < strlen(code) && code[cont_sim_lido] != '\0' && c != ' '){
+              cont_sim_lido++;
+              c = code[cont_sim_lido];
+              if(c == '.') {
+                estado = NUMBER_FLOAT;
+                break;
+              }
+              else if(!isdigit(c)){
+                falhar(2);
+                break;
+              }
+            }
+
+            if(estado == NUMBER){
+              cont_sim_lido++;
+              printf("<NUMBER, INT>\n");
+              token.nome_token = NUMBER;
+              token.atributo = INT;
+              estado = ESTADO_INICIAL;
+              return(token);
+            }
+
+            break;
+
+      case NUMBER_FLOAT:
+            
+            while (cont_sim_lido < strlen(code) && code[cont_sim_lido] != '\0' && c != ' '){
+              if(!isdigit(c)){
+                printf("Aqui?");
+                falhar(2);
+              }
+            }
+            
+            cont_sim_lido++;
+            printf("<NUMBER, FLOAT>\n");
+            token.nome_token = NUMBER;
+            token.atributo = FLOAT;
+            estado = ESTADO_INICIAL;
+            return(token);
+            
             break;
       
       case STRING:
@@ -446,11 +502,17 @@ Token proximo_token() {
 
         case OP_SUB:
             cont_sim_lido++;
-            printf("<-, >\n");
-            token.nome_token = OP_SUB;
-            token.atributo = -1;
-            estado = ESTADO_INICIAL;
-            return(token);
+            c = code[cont_sim_lido];
+            if(isdigit(c)){
+              estado = NUMBER;
+            }
+            else{
+              printf("<-, >\n");
+              token.nome_token = OP_SUB;
+              token.atributo = -1;
+              estado = ESTADO_INICIAL;
+              return(token);
+            }
             break;
 
         case OP_MUL:
