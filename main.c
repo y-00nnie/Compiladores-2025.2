@@ -10,7 +10,7 @@
     TYPE_STRING, //string
     IF, //if ✅
     ELSE, //else ✅
-    WHILE, //while
+    WHILE, //while ✅
     READ, //read
     PRINT, //print
     SEMICOLON,//;
@@ -147,11 +147,58 @@ Token proximo_token() {
                 cont_sim_lido++;
                 printf("DEBUG: encontrou 'e', foi para estado ELSE\n");
             }
+            else if (c == 'w') {
+              estado = WHILE;
+              cont_sim_lido++;
+              printf("DEBUG: encontrou 'w', foi para estado WHILE\n");
+            }
+            else if (c == ';') {
+              estado = SEMICOLON;
+              cont_sim_lido++;
+            }
+            else if (c == '=') {
+              estado = ASSIGN;
+              cont_sim_lido++;
+            }
+            else if (c == '(') {
+              estado = LEFT_PARENTHESIS;
+              cont_sim_lido++;
+            }
+            else if (c == ')') {
+              estado = RIGHT_PARENTHESIS;
+              cont_sim_lido++;
+            }
+            else if (c == '{') {
+              estado = LEFT_BRACKET;
+              cont_sim_lido++;
+            }
+            else if (c == '}') {
+              estado = RIGHT_BRACKET;
+              cont_sim_lido++;
+            }
+            else if (c == ',') {
+              estado = COMMA;
+              cont_sim_lido++;
+            }
+            else if (c == '+') {
+              estado = OP_SUM;
+              cont_sim_lido++;
+            }
+            else if (c == '-') {
+              estado = OP_SUB;
+              cont_sim_lido++;
+            }
+            else if (c == '*') {
+              estado = OP_MUL;
+              cont_sim_lido++;
+            }
+            else if (c == '/') {
+              estado = OP_DIV;
+              cont_sim_lido++;
+            }
             else 
               estado = falhar();
             break;
-
-      break;
 
       case BEGIN:
             c = code[cont_sim_lido];
@@ -324,6 +371,88 @@ Token proximo_token() {
             return(token);
             break;
         
+        case WHILE:
+            c = code[cont_sim_lido];
+            if (c == 'h'){
+              estado = 12;
+              cont_sim_lido++;
+              printf("DEBUG: encontrou 'h', foi para estado 12\n");
+            }
+            else{
+              estado = ESTADO_INICIAL;
+            }
+            break;
+
+        case 12:
+            c = code[cont_sim_lido];
+            if (c == 'i'){
+              estado = 13;
+              cont_sim_lido++;
+              printf("DEBUG: encontrou 'i', foi para estado 13\n");
+            }
+            else{
+              estado = ESTADO_INICIAL;
+            }
+            break;
+
+        case 13:
+            c = code[cont_sim_lido];
+            if (c == 'l'){
+              estado = 14;
+              cont_sim_lido++;
+              printf("DEBUG: encontrou 'l', foi para estado 14\n");
+            }
+            else{
+              estado = ESTADO_INICIAL;
+            }
+            break;
+
+        case 14:
+            c = code[cont_sim_lido];
+            if (c == 'e'){
+              estado = 15;
+              printf("DEBUG: encontrou 'e', foi para estado 14\n");
+            }
+            else{
+              estado = ESTADO_INICIAL;
+            }
+            break;
+
+        case 15: 
+            cont_sim_lido++;
+            printf("<while, >\n");
+            token.nome_token = ELSE;
+            token.atributo = -1;
+            estado = ESTADO_INICIAL;
+            return(token);
+            break;
+
+        case SEMICOLON: 
+            cont_sim_lido++;
+            printf("<;, >\n");
+            token.nome_token = SEMICOLON;
+            token.atributo = -1;
+            estado = ESTADO_INICIAL;
+            return(token);
+            break;
+
+        case ASSIGN: 
+            cont_sim_lido++;
+            printf("<=, >\n");
+            token.nome_token = ASSIGN;
+            token.atributo = -1;
+            estado = ESTADO_INICIAL;
+            return(token);
+            break;
+        
+        case LEFT_PARENTHESIS: 
+            cont_sim_lido++;
+            printf("<(, >\n");
+            token.nome_token = LEFT_PARENTHESIS;
+            token.atributo = -1;
+            estado = ESTADO_INICIAL;
+            return(token);
+            break;
       }
 
     }
