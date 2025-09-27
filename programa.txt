@@ -1,1 +1,13 @@
- inicio fim if while int else ; = () {} , + - * / read print float string
+inicio
+    int i; float f; string s;
+
+    f = (a - b) * (a + b) / (a);
+    read(i);
+    soma(i, f);
+    print(s); 
+    while (i) { 
+        i = i - a;
+        if (i) 
+            print(String, ó);
+    }
+fim
