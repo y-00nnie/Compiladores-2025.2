@@ -196,13 +196,11 @@ Token proximo_token() {
             break;
       
       case NUMBER:
-            cont_sim_lido++;
             c = code[cont_sim_lido];
 
             while (cont_sim_lido < strlen(code) && code[cont_sim_lido] != '\0' && c != ' '){
-              cont_sim_lido++;
-              c = code[cont_sim_lido];
               if(c == '.') {
+                cont_sim_lido++;
                 estado = NUMBER_FLOAT;
                 break;
               }
@@ -210,6 +208,8 @@ Token proximo_token() {
                 falhar(2);
                 break;
               }
+              cont_sim_lido++;
+              c = code[cont_sim_lido];
             }
 
             if(estado == NUMBER){
@@ -225,13 +225,17 @@ Token proximo_token() {
 
       case NUMBER_FLOAT:
             
+            c = code[cont_sim_lido];
+
             while (cont_sim_lido < strlen(code) && code[cont_sim_lido] != '\0' && c != ' '){
               if(!isdigit(c)){
                 printf("Aqui?");
                 falhar(2);
               }
+              cont_sim_lido++;
+              c = code[cont_sim_lido];
             }
-            
+
             cont_sim_lido++;
             printf("<NUMBER, FLOAT>\n");
             token.nome_token = NUMBER;

@@ -1,1 +1,13 @@
-10.0
+inicio
+    int i; float f; string s;
+
+    f = (5 - 4) * (1 + 6) / (3.0); 
+    read(i); 
+    soma(i, f); 
+    print(s); 
+    while (i) { 
+        i = i - 1;
+        if (i)  
+            print("String, ó");
+    }
+fim
