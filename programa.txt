@@ -8,6 +8,6 @@ inicio
     while (i) { 
         i = i - a;
         if (i) 
-            print(String, ó);
+            print("String, ó");
     }
 fim

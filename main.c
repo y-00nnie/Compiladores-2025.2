@@ -1,7 +1,7 @@
 /* enum tipo_token {
     ESTADO_INICIAL = 256,
     BEGIN, //inicio ✅
-    ID, //id 
+    ID, //id ✅
     NUMBER,
     STRING,
     COMMENTARY,
@@ -140,6 +140,12 @@ Token proximo_token() {
                 estado = ID;
             }
             
+            //strings
+
+            else if (c == '"'){
+              estado = STRING;
+            }
+
             //caracteres únicos
 
             else if (c == ';') {
@@ -179,6 +185,29 @@ Token proximo_token() {
               estado = falhar();
             break;
       
+      case STRING:
+            cont_sim_lido++;
+            c = code[cont_sim_lido];
+
+            while (cont_sim_lido < strlen(code) && code[cont_sim_lido] != '\0' && c != '"'){
+              cont_sim_lido++;
+              c = code[cont_sim_lido];
+            }
+
+            if (cont_sim_lido >= strlen(code) || code[cont_sim_lido] == '\0'){
+              printf("String não fechada\n");
+            }
+            else{
+              cont_sim_lido++;
+              printf("<STRING, >\n");
+              token.nome_token = STRING;
+              token.atributo = -1;
+              estado = ESTADO_INICIAL;
+              return(token);
+            }
+            
+      break;
+
       case ID:
             char lexema[30];
             int pos = 0;
@@ -187,7 +216,7 @@ Token proximo_token() {
             cont_sim_lido++;
             pos++;
             
-            while (cont_sim_lido < strlen(code) && code[cont_sim_lido] != '\0' && pos < 99){
+            while (cont_sim_lido < strlen(code) && code[cont_sim_lido] != '\0' && pos < 29){
               
                 c = code[cont_sim_lido];
 
