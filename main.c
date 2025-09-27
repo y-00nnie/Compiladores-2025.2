@@ -75,6 +75,10 @@ int falhar() {
       partida = END;
       break;
 
+    case END:
+      partida = IF;
+      break;
+
   }
   return partida;
 }
@@ -107,6 +111,14 @@ Token proximo_token() {
               cont_sim_lido++;
               printf("DEBUG: encontrou 'n', foi para estado 1\n");
             }
+            else if (c == 'f'){
+              estado = IF;
+              printf("DEBUG: encontrou 'f', foi para estado IF\n");
+            }
+            else{
+              estado = BEGIN;
+              estado = falhar();
+            }
             break;
 
         case 1:
@@ -115,6 +127,10 @@ Token proximo_token() {
               estado = 2;
               cont_sim_lido++;
               printf("DEBUG: encontrou 'i', foi para estado 2\n");
+            }
+            else{
+              estado = BEGIN;
+              estado = falhar();
             }
             break;
 
@@ -125,6 +141,10 @@ Token proximo_token() {
               cont_sim_lido++;
               printf("DEBUG: encontrou 'c', foi para estado 3\n");
             }
+            else{
+              estado = BEGIN;
+              estado = falhar();
+            }
             break;
   
         case 3:
@@ -134,6 +154,10 @@ Token proximo_token() {
               cont_sim_lido++;
               printf("DEBUG: encontrou 'i', foi para estado 4\n");
             }
+            else{
+              estado = BEGIN;
+              estado = falhar();
+            }
             break;
         
         case 4:
@@ -141,6 +165,10 @@ Token proximo_token() {
             if (c == 'o'){
               estado = 5;
               printf("DEBUG: encontrou 'o', foi para estado 5\n");
+            }
+            else{
+              estado = BEGIN;
+              estado = falhar();
             }
             break;
 
@@ -164,6 +192,8 @@ Token proximo_token() {
                 cont_sim_lido++;
                 printf("DEBUG: encontrou 'f', foi para estado 6\n");
             }
+            else 
+              estado = falhar();
             break;
 
         case 6:
@@ -173,13 +203,21 @@ Token proximo_token() {
               cont_sim_lido++;
               printf("DEBUG: encontrou 'i', foi para estado 7\n");
             }
+            else{
+              estado = END;
+              estado = falhar();
+            }
             break;
 
         case 7:
             c = code[cont_sim_lido];
             if (c == 'm'){
               estado = 8;
-              printf("DEBUG: encontrou 'd', foi para estado 8\n");
+              printf("DEBUG: encontrou 'm', foi para estado 8\n");
+            }
+            else{
+              estado = END;
+              estado = falhar();
             }
             break;
         
@@ -191,7 +229,16 @@ Token proximo_token() {
             estado = BEGIN;
             return(token);
             break;
-            
+
+        case IF: 
+            cont_sim_lido++;
+            printf("<if, >\n");
+            token.nome_token = IF;
+            token.atributo = -1;
+            estado = BEGIN;
+            return(token);
+            break;
+        
       }
 
     }
