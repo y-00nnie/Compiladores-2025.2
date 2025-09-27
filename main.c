@@ -68,6 +68,17 @@ unsigned char *readFile(char *fileName) {
   return code;
 }
 
+int falhar() {
+  switch (estado) {
+
+    case BEGIN:
+      partida = END;
+      break;
+
+  }
+  return partida;
+}
+
 Token proximo_token() {
   Token token;
   char c;
@@ -85,6 +96,8 @@ Token proximo_token() {
                 cont_sim_lido++;
                 printf("DEBUG: encontrou 'i', foi para estado 0\n");
             }
+            else 
+              estado = falhar();
             break;
 
         case 0:
@@ -138,6 +151,47 @@ Token proximo_token() {
             token.atributo = -1;
             estado = BEGIN;
             return(token);
+            break;
+        
+        case END: 
+            c = code[cont_sim_lido];
+            if ((c == ' ') || (c == '\n')) {
+            estado = END;
+            cont_sim_lido++;
+            }
+            else if (c == 'f') {
+                estado = 6;
+                cont_sim_lido++;
+                printf("DEBUG: encontrou 'f', foi para estado 6\n");
+            }
+            break;
+
+        case 6:
+            c = code[cont_sim_lido];
+            if (c == 'i'){
+              estado = 7;
+              cont_sim_lido++;
+              printf("DEBUG: encontrou 'i', foi para estado 7\n");
+            }
+            break;
+
+        case 7:
+            c = code[cont_sim_lido];
+            if (c == 'm'){
+              estado = 8;
+              printf("DEBUG: encontrou 'd', foi para estado 8\n");
+            }
+            break;
+        
+        case 8:
+            cont_sim_lido++;
+            printf("<end, >\n");
+            token.nome_token = END;
+            token.atributo = -1;
+            estado = BEGIN;
+            return(token);
+            break;
+            
       }
 
     }
