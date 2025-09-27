@@ -1,31 +1,11 @@
-/* enum tipo_token {
-    ESTADO_INICIAL = 256,
-    BEGIN, //inicio ✅
-    ID, //id ✅
-    NUMBER,
-    STRING, ✅
-    COMMENTARY,
-    TYPE_INT, //int ✅
-    TYPE_FLOAT, //float ✅
-    TYPE_STRING, //string ✅
-    IF, //if ✅
-    ELSE, //else ✅
-    WHILE, //while ✅
-    READ, //read ✅
-    PRINT, //print ✅
-    SEMICOLON,//; ✅
-    ASSIGN, // = ✅
-    LEFT_PARENTHESIS, // ( ✅
-    RIGHT_PARENTHESIS,// ) ✅
-    LEFT_BRACKET, // { ✅
-    RIGHT_BRACKET, // } ✅
-    COMMA, // , ✅
-    OP_SUM, // + ✅
-    OP_SUB, // - ✅
-    OP_MUL, // * ✅
-    OP_DIV, // / ✅
-    END // fim ✅
-};*/
+/* TODO
+
+-> quando não há espaço entre os números em parenteses, 
+ocorre um erro de compilação porque o número é considerado inválido
+
+-> implementar mais erros na função falhar()
+
+*/
 
 #include <ctype.h>
 #include <stdio.h>
@@ -104,7 +84,7 @@ unsigned char *readFile(char *fileName) {
   return code;
 }
 
-void falhar(int erro) {
+void falhar(int erro) { //recebe o número do erro como parâmetro, encerra o programa quando chamada
 
   switch (erro) {
 
@@ -116,8 +96,8 @@ void falhar(int erro) {
       printf("ERRO: número inválido!\n");
       break;
 
-    case ELSE:
-      partida = BEGIN;
+    case 3:
+      printf("ERRO: string não foi fechada!\n");
       break;
 
   }
@@ -255,7 +235,7 @@ Token proximo_token() {
             }
 
             if (cont_sim_lido >= strlen(code) || code[cont_sim_lido] == '\0'){
-              printf("String não fechada\n");
+              falhar(3);
             }
             else{
               cont_sim_lido++;
