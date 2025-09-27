@@ -127,6 +127,7 @@ Token proximo_token() {
     switch (estado) {
         
       case ESTADO_INICIAL:
+
             c = code[cont_sim_lido];
             if ((c == ' ') || (c == '\n')) {
               estado = ESTADO_INICIAL;
@@ -138,22 +139,18 @@ Token proximo_token() {
             else if (c == 'i') {
                 estado = BEGIN;
                 cont_sim_lido++;
-                printf("DEBUG: encontrou 'i', foi para estado BEGIN\n");
             }
             else if (c == 'f') {
                 estado = END;
                 cont_sim_lido++;
-                printf("DEBUG: encontrou 'f', foi para estado END\n");
             }
             else if (c == 'e') {
                 estado = ELSE;
                 cont_sim_lido++;
-                printf("DEBUG: encontrou 'e', foi para estado ELSE\n");
             }
             else if (c == 'w') {
               estado = WHILE;
               cont_sim_lido++;
-              printf("DEBUG: encontrou 'w', foi para estado WHILE\n");
             }
             else if (c == 'r') {
               estado = READ;
@@ -216,11 +213,9 @@ Token proximo_token() {
             if (c == 'n'){
               estado = 1;
               cont_sim_lido++;
-              printf("DEBUG: encontrou 'n', foi para estado 1\n");
             }
             else if (c == 'f'){
               estado = IF;
-              printf("DEBUG: encontrou 'f', foi para estado IF\n");
             }
             else{
               estado = ESTADO_INICIAL;
@@ -232,11 +227,9 @@ Token proximo_token() {
             if (c == 'i'){
               estado = 2;
               cont_sim_lido++;
-              printf("DEBUG: encontrou 'i', foi para estado 2\n");
             }
             else if (c == 't'){
               estado = TYPE_INT;
-              printf("DEBUG: encontrou 't', foi para estado TYPE_INT\n");
             }
             else{
               estado = BEGIN;
@@ -248,7 +241,6 @@ Token proximo_token() {
             if (c == 'c'){
               estado = 3;
               cont_sim_lido++;
-              printf("DEBUG: encontrou 'c', foi para estado 3\n");
             }
             else{
               estado = BEGIN;
@@ -260,7 +252,6 @@ Token proximo_token() {
             if (c == 'i'){
               estado = 4;
               cont_sim_lido++;
-              printf("DEBUG: encontrou 'i', foi para estado 4\n");
             }
             else{
               estado = BEGIN;
@@ -271,7 +262,6 @@ Token proximo_token() {
             c = code[cont_sim_lido];
             if (c == 'o'){
               estado = 5;
-              printf("DEBUG: encontrou 'o', foi para estado 5\n");
             }
             else{
               estado = ESTADO_INICIAL;
@@ -293,7 +283,6 @@ Token proximo_token() {
             if (c == 'i'){
               estado = 7;
               cont_sim_lido++;
-              printf("DEBUG: encontrou 'i', foi para estado 7\n");
             }
             else if (c == 'l'){
               estado = TYPE_FLOAT;
@@ -308,7 +297,6 @@ Token proximo_token() {
             c = code[cont_sim_lido];
             if (c == 'm'){
               estado = 8;
-              printf("DEBUG: encontrou 'm', foi para estado 8\n");
             }
             else{
               estado = ESTADO_INICIAL;
@@ -347,7 +335,6 @@ Token proximo_token() {
             if (c == 'l'){
               estado = 9;
               cont_sim_lido++;
-              printf("DEBUG: encontrou 'l', foi para estado 9\n");
             }
             else{
               estado = ESTADO_INICIAL;
@@ -359,7 +346,6 @@ Token proximo_token() {
             if (c == 's'){
               estado = 10;
               cont_sim_lido++;
-              printf("DEBUG: encontrou 's', foi para estado 10\n");
             }
             else{
               estado = ESTADO_INICIAL;
@@ -370,7 +356,6 @@ Token proximo_token() {
             c = code[cont_sim_lido];
             if (c == 'e'){
               estado = 11;
-              printf("DEBUG: encontrou 'e', foi para estado 11\n");
             }
             else{
               estado = ESTADO_INICIAL;
@@ -391,7 +376,6 @@ Token proximo_token() {
             if (c == 'h'){
               estado = 12;
               cont_sim_lido++;
-              printf("DEBUG: encontrou 'h', foi para estado 12\n");
             }
             else{
               estado = ESTADO_INICIAL;
@@ -403,7 +387,6 @@ Token proximo_token() {
             if (c == 'i'){
               estado = 13;
               cont_sim_lido++;
-              printf("DEBUG: encontrou 'i', foi para estado 13\n");
             }
             else{
               estado = ESTADO_INICIAL;
@@ -415,7 +398,6 @@ Token proximo_token() {
             if (c == 'l'){
               estado = 14;
               cont_sim_lido++;
-              printf("DEBUG: encontrou 'l', foi para estado 14\n");
             }
             else{
               estado = ESTADO_INICIAL;
@@ -426,7 +408,6 @@ Token proximo_token() {
             c = code[cont_sim_lido];
             if (c == 'e'){
               estado = 15;
-              printf("DEBUG: encontrou 'e', foi para estado 15\n");
             }
             else{
               estado = ESTADO_INICIAL;
@@ -742,7 +723,6 @@ Token proximo_token() {
 
     }
 }
-
 
 int main() {
   Token token;
