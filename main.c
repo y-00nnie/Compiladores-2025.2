@@ -73,10 +73,28 @@ Token proximo_token() {
   char c;
   while (code[cont_sim_lido] != EOF) {
     switch (estado) {
+        case BEGIN:
+            c = code[cont_sim_lido];
+            if ((c == ' ') || (c == '\n')) {
+            estado = BEGIN;
+            cont_sim_lido++;
+            }
+            else if (c == 'i')
+                estado = 0;
+            break;
+        
+        case 0:
+            cont_sim_lido++;
+            printf("<inicio, >\n");
+            token.nome_token = INICIO;
+            token.atributo = -1;
+            estado = BEGIN;
+            return(token);
+      }
 
     }
 }
-}
+
 
 int main() {
   Token token;
