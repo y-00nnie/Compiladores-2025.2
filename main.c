@@ -1,3 +1,32 @@
+/* enum tipo_token {
+    ESTADO_INICIAL = 256,
+    BEGIN, //inicio ✅
+    ID, //id 
+    NUMBER,
+    STRING,
+    COMMENTARY,
+    TYPE_INT, //int ✅
+    TYPE_FLOAT, //float
+    TYPE_STRING, //string
+    IF, //if ✅
+    ELSE, //else ✅
+    WHILE, //while
+    READ, //read
+    PRINT, //print
+    SEMICOLON,//;
+    ASSIGN, // =
+    LEFT_PARENTHESIS, // (
+    RIGHT_PARENTHESIS,// )
+    LEFT_BRACKET, // {
+    RIGHT_BRACKET, // }
+    COMMA, // ,
+    OP_SUM, // +
+    OP_SUB, // -
+    OP_MUL, // *
+    OP_DIV, // /
+    END // fim
+};*/
+
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -6,8 +35,9 @@
 //nome_tokens
 
 enum tipo_token {
-    BEGIN = 256,
-    ID, //id
+    ESTADO_INICIAL = 256,
+    BEGIN, //inicio 
+    ID, //id 
     NUMBER,
     STRING,
     COMMENTARY,
@@ -38,7 +68,7 @@ typedef struct Token {
   int atributo;
 } Token;
 
-int estado = BEGIN;
+int estado = ESTADO_INICIAL;
 int partida = 0;
 int cont_sim_lido = 0;
 int valor_lexico;
@@ -69,6 +99,9 @@ unsigned char *readFile(char *fileName) {
 }
 
 int falhar() {
+
+  cont_sim_lido++;
+
   switch (estado) {
 
     case BEGIN:
@@ -76,7 +109,11 @@ int falhar() {
       break;
 
     case END:
-      partida = IF;
+      partida = ELSE;
+      break;
+
+    case ELSE:
+      partida = BEGIN;
       break;
 
   }
@@ -89,22 +126,34 @@ Token proximo_token() {
   while (cont_sim_lido < strlen(code) && code[cont_sim_lido] != '\0') {
     switch (estado) {
         
-      case BEGIN:
+      case ESTADO_INICIAL:
             c = code[cont_sim_lido];
             if ((c == ' ') || (c == '\n')) {
-            estado = BEGIN;
-            cont_sim_lido++;
+              estado = ESTADO_INICIAL;
+              cont_sim_lido++;
             }
             else if (c == 'i') {
-                estado = 0;
+                estado = BEGIN;
                 cont_sim_lido++;
-                printf("DEBUG: encontrou 'i', foi para estado 0\n");
+                printf("DEBUG: encontrou 'i', foi para estado BEGIN\n");
+            }
+            else if (c == 'f') {
+                estado = END;
+                cont_sim_lido++;
+                printf("DEBUG: encontrou 'f', foi para estado END\n");
+            }
+            else if (c == 'e') {
+                estado = ELSE;
+                cont_sim_lido++;
+                printf("DEBUG: encontrou 'e', foi para estado ELSE\n");
             }
             else 
               estado = falhar();
             break;
 
-        case 0:
+      break;
+
+      case BEGIN:
             c = code[cont_sim_lido];
             if (c == 'n'){
               estado = 1;
@@ -116,8 +165,7 @@ Token proximo_token() {
               printf("DEBUG: encontrou 'f', foi para estado IF\n");
             }
             else{
-              estado = BEGIN;
-              estado = falhar();
+              estado = ESTADO_INICIAL;
             }
             break;
 
@@ -128,9 +176,12 @@ Token proximo_token() {
               cont_sim_lido++;
               printf("DEBUG: encontrou 'i', foi para estado 2\n");
             }
+            else if (c == 't'){
+              estado = TYPE_INT;
+              printf("DEBUG: encontrou 't', foi para estado TYPE_INT\n");
+            }
             else{
               estado = BEGIN;
-              estado = falhar();
             }
             break;
 
@@ -143,7 +194,6 @@ Token proximo_token() {
             }
             else{
               estado = BEGIN;
-              estado = falhar();
             }
             break;
   
@@ -156,7 +206,6 @@ Token proximo_token() {
             }
             else{
               estado = BEGIN;
-              estado = falhar();
             }
             break;
         
@@ -167,8 +216,7 @@ Token proximo_token() {
               printf("DEBUG: encontrou 'o', foi para estado 5\n");
             }
             else{
-              estado = BEGIN;
-              estado = falhar();
+              estado = ESTADO_INICIAL;
             }
             break;
 
@@ -177,26 +225,12 @@ Token proximo_token() {
             printf("<inicio, >\n");
             token.nome_token = BEGIN;
             token.atributo = -1;
-            estado = BEGIN;
+            estado = ESTADO_INICIAL;
             return(token);
             break;
         
         case END: 
-            c = code[cont_sim_lido];
-            if ((c == ' ') || (c == '\n')) {
-            estado = END;
-            cont_sim_lido++;
-            }
-            else if (c == 'f') {
-                estado = 6;
-                cont_sim_lido++;
-                printf("DEBUG: encontrou 'f', foi para estado 6\n");
-            }
-            else 
-              estado = falhar();
-            break;
 
-        case 6:
             c = code[cont_sim_lido];
             if (c == 'i'){
               estado = 7;
@@ -204,8 +238,7 @@ Token proximo_token() {
               printf("DEBUG: encontrou 'i', foi para estado 7\n");
             }
             else{
-              estado = END;
-              estado = falhar();
+              estado = ESTADO_INICIAL;
             }
             break;
 
@@ -216,8 +249,7 @@ Token proximo_token() {
               printf("DEBUG: encontrou 'm', foi para estado 8\n");
             }
             else{
-              estado = END;
-              estado = falhar();
+              estado = ESTADO_INICIAL;
             }
             break;
         
@@ -226,7 +258,7 @@ Token proximo_token() {
             printf("<end, >\n");
             token.nome_token = END;
             token.atributo = -1;
-            estado = BEGIN;
+            estado = ESTADO_INICIAL;
             return(token);
             break;
 
@@ -235,7 +267,60 @@ Token proximo_token() {
             printf("<if, >\n");
             token.nome_token = IF;
             token.atributo = -1;
-            estado = BEGIN;
+            estado = ESTADO_INICIAL;
+            return(token);
+            break;
+        
+        case TYPE_INT: 
+            cont_sim_lido++;
+            printf("<int, >\n");
+            token.nome_token = TYPE_INT;
+            token.atributo = -1;
+            estado = ESTADO_INICIAL;
+            return(token);
+            break;
+
+        case ELSE:
+            c = code[cont_sim_lido];
+            if (c == 'l'){
+              estado = 9;
+              cont_sim_lido++;
+              printf("DEBUG: encontrou 'l', foi para estado 9\n");
+            }
+            else{
+              estado = ESTADO_INICIAL;
+            }
+            break;
+        
+        case 9:
+            c = code[cont_sim_lido];
+            if (c == 's'){
+              estado = 10;
+              cont_sim_lido++;
+              printf("DEBUG: encontrou 's', foi para estado 10\n");
+            }
+            else{
+              estado = ESTADO_INICIAL;
+            }
+            break;
+
+        case 10:
+            c = code[cont_sim_lido];
+            if (c == 'e'){
+              estado = 11;
+              printf("DEBUG: encontrou 'e', foi para estado 11\n");
+            }
+            else{
+              estado = ESTADO_INICIAL;
+            }
+            break;
+          
+        case 11: 
+            cont_sim_lido++;
+            printf("<else, >\n");
+            token.nome_token = ELSE;
+            token.atributo = -1;
+            estado = ESTADO_INICIAL;
             return(token);
             break;
         
