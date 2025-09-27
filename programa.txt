@@ -1,1 +1,1 @@
- inicio fim if int else while ; = (
+ inicio fim if while int else ; = () {}
