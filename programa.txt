@@ -1,1 +1,1 @@
- inicio fim if while int else ; = () {}
+ inicio fim if while int else ; = () {} , + - * / read print float string

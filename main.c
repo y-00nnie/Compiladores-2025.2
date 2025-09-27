@@ -6,25 +6,25 @@
     STRING,
     COMMENTARY,
     TYPE_INT, //int ✅
-    TYPE_FLOAT, //float
-    TYPE_STRING, //string
+    TYPE_FLOAT, //float ✅
+    TYPE_STRING, //string ✅
     IF, //if ✅
     ELSE, //else ✅
     WHILE, //while ✅
-    READ, //read
-    PRINT, //print
+    READ, //read ✅
+    PRINT, //print ✅
     SEMICOLON,//; ✅
     ASSIGN, // = ✅
-    LEFT_PARENTHESIS, // (
-    RIGHT_PARENTHESIS,// )
-    LEFT_BRACKET, // {
-    RIGHT_BRACKET, // }
-    COMMA, // ,
-    OP_SUM, // +
-    OP_SUB, // -
-    OP_MUL, // *
-    OP_DIV, // /
-    END // fim
+    LEFT_PARENTHESIS, // ( ✅
+    RIGHT_PARENTHESIS,// ) ✅
+    LEFT_BRACKET, // { ✅
+    RIGHT_BRACKET, // } ✅
+    COMMA, // , ✅
+    OP_SUM, // + ✅
+    OP_SUB, // - ✅
+    OP_MUL, // * ✅
+    OP_DIV, // / ✅
+    END // fim ✅
 };*/
 
 #include <ctype.h>
@@ -132,6 +132,9 @@ Token proximo_token() {
               estado = ESTADO_INICIAL;
               cont_sim_lido++;
             }
+
+            //palavras reservadas
+
             else if (c == 'i') {
                 estado = BEGIN;
                 cont_sim_lido++;
@@ -152,6 +155,25 @@ Token proximo_token() {
               cont_sim_lido++;
               printf("DEBUG: encontrou 'w', foi para estado WHILE\n");
             }
+            else if (c == 'r') {
+              estado = READ;
+              cont_sim_lido++;
+            }
+            else if (c == 'p'){
+              estado = PRINT;
+              cont_sim_lido++;
+            }
+            else if (c == 'f') {
+              estado = TYPE_FLOAT;
+              cont_sim_lido++;
+            }
+            else if (c == 's') {
+              estado = TYPE_STRING;
+              cont_sim_lido++;
+            }
+
+            //caracteres únicos
+
             else if (c == ';') {
               estado = SEMICOLON;
             }
@@ -272,6 +294,10 @@ Token proximo_token() {
               estado = 7;
               cont_sim_lido++;
               printf("DEBUG: encontrou 'i', foi para estado 7\n");
+            }
+            else if (c == 'l'){
+              estado = TYPE_FLOAT;
+              cont_sim_lido++;
             }
             else{
               estado = ESTADO_INICIAL;
@@ -416,6 +442,203 @@ Token proximo_token() {
             return(token);
             break;
 
+        case READ:
+            c = code[cont_sim_lido];
+            if (c == 'e'){
+              cont_sim_lido++;
+              estado = 16;
+            }
+            else{
+              estado = ESTADO_INICIAL;
+            }
+            break;
+        
+        case 16:
+            c = code[cont_sim_lido];
+            if (c == 'a'){
+              cont_sim_lido++;
+              estado = 17;
+            }
+            else{
+              estado = ESTADO_INICIAL;
+            }
+            break;
+
+        case 17:
+            c = code[cont_sim_lido];
+            if (c == 'd'){
+              estado = 18;
+            }
+            else{
+              estado = ESTADO_INICIAL;
+            }
+            break;
+        
+        case 18: 
+            cont_sim_lido++;
+            printf("<read, >\n");
+            token.nome_token = READ;
+            token.atributo = -1;
+            estado = ESTADO_INICIAL;
+            return(token);
+            break;
+        
+        case PRINT:
+            c = code[cont_sim_lido];
+            if (c == 'r'){
+              cont_sim_lido++;
+              estado = 19;
+            }
+            else{
+              estado = ESTADO_INICIAL;
+            }
+            break;
+        
+        case 19:
+            c = code[cont_sim_lido];
+            if (c == 'i'){
+              cont_sim_lido++;
+              estado = 20;
+            }
+            else{
+              estado = ESTADO_INICIAL;
+            }
+            break;
+        
+        case 20:
+            c = code[cont_sim_lido];
+            if (c == 'n'){
+              cont_sim_lido++;
+              estado = 21;
+            }
+            else{
+              estado = ESTADO_INICIAL;
+            }
+            break;
+        
+        case 21:
+            c = code[cont_sim_lido];
+            if (c == 't'){
+              estado = 22;
+            }
+            else{
+              estado = ESTADO_INICIAL;
+            }
+            break;
+        
+        case 22: 
+            cont_sim_lido++;
+            printf("<print, >\n");
+            token.nome_token = PRINT;
+            token.atributo = -1;
+            estado = ESTADO_INICIAL;
+            return(token);
+            break;
+        
+        case TYPE_FLOAT:
+            c = code[cont_sim_lido];
+            if (c == 'o'){
+              cont_sim_lido++;
+              estado = 23;
+            }
+            else{
+              estado = ESTADO_INICIAL;
+            }
+            break;
+        
+        case 23:
+            c = code[cont_sim_lido];
+            if (c == 'a'){
+              cont_sim_lido++;
+              estado = 24;
+            }
+            else{
+              estado = ESTADO_INICIAL;
+            }
+            break;
+        
+        case 24:
+            c = code[cont_sim_lido];
+            if (c == 't'){
+              estado = 25;
+            }
+            else{
+              estado = ESTADO_INICIAL;
+            }
+            break;
+        
+        case 25: 
+            cont_sim_lido++;
+            printf("<float, >\n");
+            token.nome_token = TYPE_FLOAT;
+            token.atributo = -1;
+            estado = ESTADO_INICIAL;
+            return(token);
+            break;
+
+        case TYPE_STRING:
+            c = code[cont_sim_lido];
+            if (c == 't'){
+              cont_sim_lido++;
+              estado = 26;
+            }
+            else{
+              estado = ESTADO_INICIAL;
+            }
+            break;
+        
+        case 26:
+            c = code[cont_sim_lido];
+            if (c == 'r'){
+              cont_sim_lido++;
+              estado = 27;
+            }
+            else{
+              estado = ESTADO_INICIAL;
+            }
+            break;
+        
+        case 27:
+            c = code[cont_sim_lido];
+            if (c == 'i'){
+              cont_sim_lido++;
+              estado = 28;
+            }
+            else{
+              estado = ESTADO_INICIAL;
+            }
+            break;
+        
+        case 28:
+            c = code[cont_sim_lido];
+            if (c == 'n'){
+              cont_sim_lido++;
+              estado = 29;
+            }
+            else{
+              estado = ESTADO_INICIAL;
+            }
+            break;
+
+        case 29:
+            c = code[cont_sim_lido];
+            if (c == 'g'){
+              estado = 30;
+            }
+            else{
+              estado = ESTADO_INICIAL;
+            }
+            break;
+        
+        case 30: 
+            cont_sim_lido++;
+            printf("<string, >\n");
+            token.nome_token = TYPE_STRING;
+            token.atributo = -1;
+            estado = ESTADO_INICIAL;
+            return(token);
+            break;
+        
         case SEMICOLON: 
             cont_sim_lido++;
             printf("<;, >\n");
@@ -469,6 +692,52 @@ Token proximo_token() {
             estado = ESTADO_INICIAL;
             return(token);
             break;
+
+        case COMMA:
+            cont_sim_lido++;
+            printf("<,, >\n");
+            token.nome_token = COMMA;
+            token.atributo = -1;
+            estado = ESTADO_INICIAL;
+            return(token);
+            break;
+
+        case OP_SUM:
+            cont_sim_lido++;
+            printf("<+, >\n");
+            token.nome_token = OP_SUM;
+            token.atributo = -1;
+            estado = ESTADO_INICIAL;
+            return(token);
+            break;
+
+        case OP_SUB:
+            cont_sim_lido++;
+            printf("<-, >\n");
+            token.nome_token = OP_SUB;
+            token.atributo = -1;
+            estado = ESTADO_INICIAL;
+            return(token);
+            break;
+
+        case OP_MUL:
+            cont_sim_lido++;
+            printf("<*, >\n");
+            token.nome_token = OP_MUL;
+            token.atributo = -1;
+            estado = ESTADO_INICIAL;
+            return(token);
+            break;
+
+        case OP_DIV:
+            cont_sim_lido++;
+            printf("</, >\n");
+            token.nome_token = OP_DIV;
+            token.atributo = -1;
+            estado = ESTADO_INICIAL;
+            return(token);
+            break;
+      
       }
 
     }
