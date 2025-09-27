@@ -13,8 +13,8 @@
     WHILE, //while ✅
     READ, //read
     PRINT, //print
-    SEMICOLON,//;
-    ASSIGN, // =
+    SEMICOLON,//; ✅
+    ASSIGN, // = ✅
     LEFT_PARENTHESIS, // (
     RIGHT_PARENTHESIS,// )
     LEFT_BRACKET, // {
