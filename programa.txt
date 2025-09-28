@@ -1,7 +1,7 @@
 inicio
     int i; float f; string s;
 
-    f = (5 - 4) * (1 + 6) / (3.0); 
+    f = (5 - 4.0) * (1 + 6) / (3);
     read(i); 
     soma(i, f); 
     print(s); 

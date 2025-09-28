@@ -1,7 +1,7 @@
 /* TODO
 
 -> quando não há espaço entre os números em parenteses, 
-ocorre um erro de compilação porque o número é considerado inválido
+ocorre um erro de compilação porque o número é considerado inválido (corrigido!!)
 
 -> implementar mais erros na função falhar()
 
@@ -178,22 +178,20 @@ Token proximo_token() {
       case NUMBER:
             c = code[cont_sim_lido];
 
-            while (cont_sim_lido < strlen(code) && code[cont_sim_lido] != '\0' && c != ' '){
+            while (cont_sim_lido < strlen(code) && code[cont_sim_lido] != '\0' && c != ' ' && isdigit(c)){
+              cont_sim_lido++;
+              c = code[cont_sim_lido];
+
               if(c == '.') {
-                cont_sim_lido++;
                 estado = NUMBER_FLOAT;
                 break;
               }
-              else if(!isdigit(c)){
-                falhar(2);
-                break;
-              }
-              cont_sim_lido++;
-              c = code[cont_sim_lido];
             }
 
             if(estado == NUMBER){
-              cont_sim_lido++;
+              if(isdigit(c)){
+                cont_sim_lido++;
+              }
               printf("<NUMBER, INT>\n");
               token.nome_token = NUMBER;
               token.atributo = INT;
@@ -204,19 +202,21 @@ Token proximo_token() {
             break;
 
       case NUMBER_FLOAT:
-            
+            cont_sim_lido++;
             c = code[cont_sim_lido];
+            
+            if (!isdigit(c)){
+              falhar(2);
+            }
 
-            while (cont_sim_lido < strlen(code) && code[cont_sim_lido] != '\0' && c != ' '){
-              if(!isdigit(c)){
-                printf("Aqui?");
-                falhar(2);
-              }
+            while (cont_sim_lido < strlen(code) && code[cont_sim_lido] != '\0' && c != ' ' && isdigit(c)){
               cont_sim_lido++;
               c = code[cont_sim_lido];
             }
 
-            cont_sim_lido++;
+            if(isdigit(c)){
+                cont_sim_lido++;
+              }
             printf("<NUMBER, FLOAT>\n");
             token.nome_token = NUMBER;
             token.atributo = FLOAT;
