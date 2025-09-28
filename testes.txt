@@ -1,0 +1,112 @@
+-> caso válido com todos os lexemas da gramática
+
+inicio
+    string s; int a; float b; int i;
+
+    i = 1;
+
+    read(a); read(b); --lê os valores de a e b
+
+    while(i){
+        if (a + b = 4){
+            a = a + 1; 
+        }
+        else if (a / b = 5){
+            b = b + 1;
+        }
+        else if (a * b = 10){
+            a = b + 1;
+        }
+        else if (a - b = 0){
+            a = b + b;
+        }
+        else 
+            i = 0;
+    }
+
+    s = "finalizado";
+
+    print(s);
+
+fim
+
+
+
+-> caso com erro em float
+
+inicio
+    int a; int b;
+    
+    read(a);
+    read(b);
+    
+    b = (a + 2..)
+
+fim
+
+-> saída
+
+<SMALL_COMMENTARY, >
+<inicio, >
+<int, >
+<ID, 0>
+<;, >
+<int, >
+<ID, 1>
+<;, >
+<read, >
+<(, >
+<ID, 0>
+<), >
+<;, >
+<read, >
+<(, >
+<ID, 2>
+<), >
+<;, >
+<ID, 1>
+<=, >
+<(, >
+<ID, 0>
+<+, >
+ERRO: número inválido!
+
+-> caso com caracter inválido
+
+inicio 
+
+    int i;
+    i = i + $;
+
+fim
+
+-> saída
+
+<inicio, >
+<int, >
+<ID, 0>
+<;, >
+<ID, 1>
+<=, >
+<ID, 0>
+<+, >
+ERRO: caracter não pertercente a linguagem!
+
+--> erro de string não fechada
+
+inicio
+    
+    string s;
+    s = "analisador léxico;
+
+fim;
+
+--> saída
+
+<inicio, >
+<string, >
+<ID, 0>
+<;, >
+<ID, 1>
+<=, >
+ERRO: string não foi fechada!

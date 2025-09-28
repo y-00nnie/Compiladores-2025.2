@@ -73,6 +73,7 @@ int posicao_na_tabela;
 
 int inserir_na_tabela(No **lista, char *lexema, enum tipo_token tipo){
     No *aux, *novo = malloc(sizeof(No));
+    No *ultimo = NULL;
     int pos = 0;
     
     if(novo){
@@ -86,17 +87,18 @@ int inserir_na_tabela(No **lista, char *lexema, enum tipo_token tipo){
         }
         else{
             aux = *lista;
-            while(aux -> proximo != NULL){
+            while(aux != NULL){
               if(strcmp(aux -> lex, lexema) == 0){
                 int pos_atual = aux -> pos;
                 free(novo);
                 return pos_atual;
               }
+              ultimo = aux;
               pos++;
               aux = aux -> proximo;  
             }
-            novo -> pos = pos + 1;
-            aux -> proximo = novo;
+            novo -> pos = pos;
+            ultimo -> proximo = novo;
         }
 
         return novo -> pos;
@@ -154,6 +156,10 @@ void falhar(int erro) { //recebe o número do erro como parâmetro, encerra o pr
     case 3:
       printf("ERRO: string não foi fechada!\n");
       break;
+    
+    case 4:
+      printf("ERRO: comentário não foi fechado!\n");
+      break;  
 
   }
   exit(-1);
@@ -234,18 +240,40 @@ Token proximo_token() {
             c = code[cont_sim_lido];
 
             while (cont_sim_lido < strlen(code) && code[cont_sim_lido] != '\0' && code[cont_sim_lido] != '\n'){
+              
+              if(code[cont_sim_lido] == '[' && code[cont_sim_lido + 1] == '['){
+                estado = COMMENTARY;
+                cont_sim_lido += 2;
+                break;
+              }
               cont_sim_lido++;
               c = code[cont_sim_lido];
             }
-
-            printf("<SMALL_COMMENTARY, >\n");
-            token.nome_token = SMALL_COMMENTARY;
-            token.atributo = -1;
-            estado = ESTADO_INICIAL;
-            return(token);
+            if (estado == SMALL_COMMENTARY){
+              printf("<SMALL_COMMENTARY, >\n");
+              token.nome_token = SMALL_COMMENTARY;
+              token.atributo = -1;
+              estado = ESTADO_INICIAL;
+              return(token);
+            }
 
             break;
-
+      
+      case COMMENTARY:
+            while (cont_sim_lido + 1 < strlen(code) && code[cont_sim_lido] != '\0') {
+                if (code[cont_sim_lido] == ']' && code[cont_sim_lido + 1] == ']') {
+                    cont_sim_lido += 2;  // Pula "]]"
+                    printf("<COMMENTARY, >\n");
+                    token.nome_token = COMMENTARY;
+                    token.atributo = -1;
+                    estado = ESTADO_INICIAL;
+                    return(token);
+                }
+                cont_sim_lido++;
+            }
+            falhar(4);
+            break;
+            
       case NUMBER:
             c = code[cont_sim_lido];
 
@@ -387,7 +415,7 @@ Token proximo_token() {
               posicao_na_tabela = inserir_na_tabela(&tabela_simbolos, lexema, ID);
               printf("<ID, %d>\n", posicao_na_tabela);
               token.nome_token = ID;
-              token.atributo = -1;
+              token.atributo = posicao_na_tabela;
               estado = ESTADO_INICIAL;
               return(token);
             }
@@ -562,7 +590,7 @@ Token proximo_token() {
             if(isdigit(c)){
               estado = NUMBER;
             }
-            if(c == '-'){
+            else if(c == '-'){
               estado = SMALL_COMMENTARY;
             }
             else{
