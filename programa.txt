@@ -3,9 +3,9 @@ inicio
 
     F = (5 - 4.0) * (1 + 6) / (3); -- calma calabreso
     read(i); 
-    soma(i, f); 
+    j = (i, f); 
     print(s); 
-    while (i) { 
+    while (i) { --uau
         i = i - 1;
         if (i)  
             print("String, ó");

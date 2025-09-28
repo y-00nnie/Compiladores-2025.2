@@ -59,11 +59,61 @@ typedef struct Token {
   int atributo;
 } Token;
 
+//tabela de símbolos
+
+typedef struct no{
+  int pos;
+  char lex[30];
+  enum tipo_token tipo;
+  struct no *proximo;
+}No;
+
+No *tabela_simbolos = NULL;
+int posicao_na_tabela;
+
+int inserir_na_tabela(No **lista, char *lexema, enum tipo_token tipo){
+    No *aux, *novo = malloc(sizeof(No));
+    int pos = 0;
+    
+    if(novo){
+        strcpy(novo -> lex, lexema);
+        novo -> tipo = tipo;
+        novo -> proximo = NULL;
+        
+        if(*lista == NULL){
+            novo -> pos = pos;
+            *lista = novo;
+        }
+        else{
+            aux = *lista;
+            while(aux -> proximo != NULL){
+              if(strcmp(aux -> lex, lexema) == 0){
+                int pos_atual = aux -> pos;
+                free(novo);
+                return pos_atual;
+              }
+              pos++;
+              aux = aux -> proximo;  
+            }
+            novo -> pos = pos + 1;
+            aux -> proximo = novo;
+        }
+
+        return novo -> pos;
+    }
+    else{
+        printf("Erro ao alocar memória!\n");
+        return -1;
+    }
+}
+
+// variáveis globais
+
 int estado = ESTADO_INICIAL;
-int partida = 0;
 int cont_sim_lido = 0;
-int valor_lexico;
 char *code;
+
+//leitura de arquivo
 
 unsigned char *readFile(char *fileName) {
   FILE *file = fopen(fileName, "r");
@@ -195,6 +245,7 @@ Token proximo_token() {
             return(token);
 
             break;
+
       case NUMBER:
             c = code[cont_sim_lido];
 
@@ -333,7 +384,8 @@ Token proximo_token() {
               cont_sim_lido--;
             }
             else{
-              printf("<ID, >\n");
+              posicao_na_tabela = inserir_na_tabela(&tabela_simbolos, lexema, ID);
+              printf("<ID, %d>\n", posicao_na_tabela);
               token.nome_token = ID;
               token.atributo = -1;
               estado = ESTADO_INICIAL;
@@ -552,4 +604,5 @@ int main() {
     token = proximo_token();
   } while (token.nome_token != EOF);
   free(code);
+  free(tabela_simbolos);
 }
