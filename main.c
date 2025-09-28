@@ -3,6 +3,10 @@
 -> quando não há espaço entre os números em parenteses, 
 ocorre um erro de compilação porque o número é considerado inválido (corrigido!!)
 
+-> implementar autômato de comentário pequeno (implementado)
+
+-> implementar uma hash table pra tabela de símbolos T^T
+
 -> implementar mais erros na função falhar()
 
 */
@@ -21,6 +25,7 @@ enum tipo_token {
     NUMBER,
     NUMBER_FLOAT,
     STRING,
+    SMALL_COMMENTARY,
     COMMENTARY,
     TYPE_INT, //int
     TYPE_FLOAT, //float
@@ -175,6 +180,21 @@ Token proximo_token() {
               falhar(1);
             break;
       
+      case SMALL_COMMENTARY:
+            c = code[cont_sim_lido];
+
+            while (cont_sim_lido < strlen(code) && code[cont_sim_lido] != '\0' && code[cont_sim_lido] != '\n'){
+              cont_sim_lido++;
+              c = code[cont_sim_lido];
+            }
+
+            printf("<SMALL_COMMENTARY, >\n");
+            token.nome_token = SMALL_COMMENTARY;
+            token.atributo = -1;
+            estado = ESTADO_INICIAL;
+            return(token);
+
+            break;
       case NUMBER:
             c = code[cont_sim_lido];
 
@@ -216,7 +236,7 @@ Token proximo_token() {
 
             if(isdigit(c)){
                 cont_sim_lido++;
-              }
+            }
             printf("<NUMBER, FLOAT>\n");
             token.nome_token = NUMBER;
             token.atributo = FLOAT;
@@ -489,6 +509,9 @@ Token proximo_token() {
             c = code[cont_sim_lido];
             if(isdigit(c)){
               estado = NUMBER;
+            }
+            if(c == '-'){
+              estado = SMALL_COMMENTARY;
             }
             else{
               printf("<-, >\n");
