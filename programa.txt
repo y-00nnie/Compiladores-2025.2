@@ -1,10 +1,7 @@
 inicio
-    string s; int a, float b; int i; --[[analisador]] 
-
+    string s; int a, float b; int i; --[[Comentario]]
     i = 1;
-
-    read(a); read(b); --lê os valores de a e b
-
+    read(a); read(b); --le os valores de a e b
     while(i){
         if (a + b = 4){
             a = a + 1; 
@@ -21,9 +18,6 @@ inicio
         else 
             i = 0;
     }
-
-    s = "finalizado"; 
-
+    s = "finalizado";
     print(s);
-
-fim 
+fim

@@ -1,15 +1,3 @@
-/* TODO
-
--> quando não há espaço entre os números em parenteses, 
-ocorre um erro de compilação porque o número é considerado inválido (corrigido!!)
-
--> implementar autômato de comentário pequeno (implementado)
-
--> implementar uma hash table pra tabela de símbolos T^T
-
--> implementar mais erros na função falhar()
-
-*/
 
 #include <ctype.h>
 #include <stdio.h>
